@@ -1,0 +1,13 @@
+{
+    "name": "rightthisminute/jw-platform-php",
+    "description": "A PHP client library for interacting with the JW Platform APIs.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Donovan Mueller",
+            "email": "zotobi@gmail.com"
+        }
+    ],
+    "require": {}
+}
