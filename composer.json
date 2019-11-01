@@ -9,5 +9,23 @@
             "email": "zotobi@gmail.com"
         }
     ],
-    "require": {}
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/RightThisMinute/php-strucutre-decoder"
+        }
+    ],
+    "require": {
+        "php": "~7",
+        "guzzlehttp/guzzle": "~6.0",
+        "ext-json": "*",
+        "rightthisminute/php-structure-decoder": "dev-master"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "autoload": {
+        "psr-4": {
+            "RightThisMinute\\JWPlatform\\": "./src"
+        }
+    }
 }
