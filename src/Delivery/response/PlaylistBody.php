@@ -6,8 +6,9 @@ namespace RightThisMinute\JWPlatform\Delivery\response;
 
 use function RightThisMinute\StructureDecoder\field;
 use RightThisMinute\StructureDecoder\types as T;
+use function RightThisMinute\StructureDecoder\optional_field;
 
-class PlaylistsBody
+class PlaylistBody
 {
 
   /**
@@ -93,12 +94,16 @@ class Links
   static public function fromJSON ($json) : self
   {
     return new self
-      ( field($json, 'next', T\string())
-      , field($json, 'last', T\string())
-      , field($json, 'first', T\string()) );
+      ( field($json, 'last', T\string())
+      , field($json, 'first', T\string())
+      , optional_field($json, 'next', T\string())
+      , optional_field($json, 'previous', T\string()) );
   }
 
-  /** @var string */
+  /** @var string|null */
+  public $previous;
+
+  /** @var string|null */
   public $next;
 
   /** @var string */
@@ -107,11 +112,13 @@ class Links
   /** @var string */
   public $first;
 
-  public function __construct (string $next, string $last, string $first)
+  public function __construct
+    (string $last, string $first, ?string $next, ?string $previous)
   {
-    $this->next = $next;
     $this->last = $last;
     $this->first = $first;
+    $this->next = $next;
+    $this->previous = $previous;
   }
 }
 

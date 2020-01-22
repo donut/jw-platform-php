@@ -168,8 +168,8 @@ class Source
   public static function fromJSON ($json) : self
   {
     return new self
-      ( field($json, 'type', T\string())
-      , field($json, 'file', T\string())
+      ( field($json, 'file', T\string())
+      , optional_field($json, 'type', T\string())
       , optional_field($json, 'label', T\string())
       , optional_field($json, 'width', T\int())
       , optional_field($json, 'height', T\int()) );
@@ -177,10 +177,10 @@ class Source
 
 
   /** @var string */
-  public $type;
-
-  /** @var string */
   public $file;
+
+  /** @var string|null */
+  public $type;
 
   /** @var string|null */
   public $label;
@@ -192,8 +192,8 @@ class Source
   public $height;
 
   public function __construct
-    ( string $type
-    , string $file
+    ( string $file
+    , ?string $type
     , ?string $label
     , ?int $width
     , ?int $height )
