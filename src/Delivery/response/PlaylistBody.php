@@ -32,7 +32,7 @@ class PlaylistBody
       , field($json, 'kind', T\string())
       , field($json, 'feed_instance_id', T\string())
       , field($json, 'playlist', T\array_of($video))
-      , field($json, 'links', $links) );
+      , optional_field($json, 'links', $links) );
   }
 
   /** @var string */
