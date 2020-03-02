@@ -53,7 +53,7 @@ class PlaylistBody
   /** @var Video[] */
   public $playlist;
 
-  /** @var Links */
+  /** @var Links|null */
   public $links;
 
 
@@ -75,7 +75,7 @@ class PlaylistBody
     , string $kind
     , string $feed_instance_id
     , array $playlist
-    , Links $links )
+    , ?Links $links )
   {
 
     $this->feedid = $feedid;
