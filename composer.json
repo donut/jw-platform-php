@@ -12,7 +12,7 @@
     "repositories": [
         {
             "type": "vcs",
-            "url": "https://github.com/RightThisMinute/php-strucutre-decoder"
+            "url": "https://github.com/RightThisMinute/php-structure-decoder.git"
         }
     ],
     "require": {
