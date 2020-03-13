@@ -16,10 +16,8 @@ class SuccessJSONBody extends SuccessBody
 
   public function __construct ($json)
   {
+    parent::__construct($json);
     $this->json = $json;
-    $rate_limit = field($json, 'rate_limit', RateLimitField::decoder());
-
-    parent::__construct($rate_limit);
   }
 
 }

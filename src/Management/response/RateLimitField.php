@@ -11,31 +11,15 @@ class RateLimitField
 {
 
   /**
-   * Decode the `rate_limit` field of a response body.
-   *
-   * @param object|array $json
-   *   The API response JSON body as decoded by `json_decode()`.
-   *
-   * @return static
-   * @throws \RightThisMinute\StructureDecoder\exceptions\DecodeError
-   */
-  static public function fromJSON ($json) : self
-  {
-    return new self
-      ( field($json, 'reset', T\int())
-      , field($json, 'limit', T\int())
-      , field($json, 'remaining', T\int()) );
-  }
-
-  /**
    * Returns a function for decoding structured data into an instance of this
    * class.
    *
    * @return callable
+   * @throws \RightThisMinute\StructureDecoder\exceptions\DecodeError
    */
   static public function decoder () : callable
   {
-    return function($v){ return self::fromJSON($v); };
+    return function($v){ return new static($v); };
   }
 
   /**
@@ -53,10 +37,21 @@ class RateLimitField
    */
   private $remaining;
 
-  public function __construct (int $reset, int $limit, int $remaining)
+  /**
+   * RateLimitField constructor.
+   *
+   * @param object|array $data =
+   *    [ 'reset' => (int)
+   *    , 'limit' => (int)
+   *    , 'remaining' => (int) ]
+   *
+   * @throws \RightThisMinute\StructureDecoder\exceptions\DecodeError
+   */
+  public function __construct ($data)
   {
-    $this->reset = $reset;
-    $this->limit = $limit;
-    $this->remaining = $remaining;
+    $this->reset = field($data, 'reset', T\int());
+    $this->limit = field($data, 'limit', T\int());
+    $this->remaining = field($data, 'remaining', T\int());
   }
 }
+

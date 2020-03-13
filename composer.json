@@ -29,7 +29,8 @@
             "RightThisMinute\\JWPlatform\\": "./src"
         },
         "files": [
-            "src/common.php"
+            "src/common.php",
+            "src/Management/videos.php"
         ]
     }
 }

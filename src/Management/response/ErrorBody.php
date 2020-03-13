@@ -10,23 +10,6 @@ use RightThisMinute\StructureDecoder\types as T;
 
 abstract class ErrorBody extends ResponseBody
 {
-
-  /**
-   * @param $json
-   *
-   * @return array
-   *   An associative array of fields to be passed to a child class'
-   *   constructor.
-   * @throws \RightThisMinute\StructureDecoder\exceptions\DecodeError
-   */
-  protected static function fieldsFromJSON ($json) : array
-  {
-    return
-      [ 'code' => field($json, 'code', T\string())
-      , 'title' => field($json, 'title', T\string())
-      , 'message' => field($json, 'message', T\string()) ];
-  }
-
   /**
    * @var string
    */
@@ -43,12 +26,22 @@ abstract class ErrorBody extends ResponseBody
   public $message;
 
 
-  public function __construct (string $code, string $title, string $message)
+  /**
+   * ErrorBody constructor.
+   *
+   * @param object|array $data =
+   *  [ 'code' => (string)
+   *  , 'title' => (string)
+   *  , 'message' => (string) ]
+   *
+   * @throws \RightThisMinute\StructureDecoder\exceptions\DecodeError
+   */
+  public function __construct ($data)
   {
     parent::__construct('error');
 
-    $this->code = $code;
-    $this->title = $title;
-    $this->message = $message;
+    $this->code = field($data, 'code', T\string());
+    $this->title = field($data, 'title', T\string());
+    $this->message = field($data, 'message', T\string());
   }
 }

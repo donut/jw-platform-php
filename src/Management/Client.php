@@ -65,7 +65,7 @@ class Client
    * @param string[] $query
    *   An associative array of URL query string parameters.
    *
-   * @return object|null
+   * @return \RightThisMinute\JWPlatform\Management\response\ResponseBody The parsed JSON response or null on 404.
    *   The parsed JSON response or null on 404.
    *
    * @throws \RightThisMinute\JWPlatform\exception\URLTooLong
@@ -94,7 +94,7 @@ class Client
    *   An associative array of form data parameters that will be URL encoded
    *   and sent in the request body
    *
-   * @return object|null
+   * @return \RightThisMinute\JWPlatform\Management\response\ResponseBody The parsed JSON response or null on 404.
    *   The parsed JSON response or null on 404.
    *
    * @throws \RightThisMinute\JWPlatform\exception\URLTooLong
@@ -138,13 +138,13 @@ class Client
 
     switch ($response->getStatusCode()) {
       case 400:
-        return BadRequestBody::fromJSON($json);
+        return new BadRequestBody($json);
 
       case 404:
-        return NotFoundBody::fromJSON($json);
+        return new NotFoundBody($json);
 
       case 429:
-        return TooManyRequestsBody::fromJSON($json);
+        return new TooManyRequestsBody($json);
 
       default:
         return new SuccessJSONBody($json);
