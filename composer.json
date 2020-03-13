@@ -19,13 +19,17 @@
         "php": "~7",
         "guzzlehttp/guzzle": "~6.0",
         "ext-json": "*",
-        "rightthisminute/php-structure-decoder": "dev-master"
+        "rightthisminute/php-structure-decoder": "dev-master",
+        "lstrojny/functional-php": "^1.11"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
     "autoload": {
         "psr-4": {
             "RightThisMinute\\JWPlatform\\": "./src"
-        }
+        },
+        "files": [
+            "src/common.php"
+        ]
     }
 }

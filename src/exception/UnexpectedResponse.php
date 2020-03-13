@@ -14,7 +14,7 @@ class UnexpectedResponse extends \Exception
     (string $request_description, ResponseInterface $response)
   {
     parent::__construct
-      ( "Failed making request: $request_description"
+      ( "Unexpected responose to request: $request_description"
       , $response->getStatusCode() );
   }
 }

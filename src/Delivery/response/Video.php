@@ -10,6 +10,16 @@ use function RightThisMinute\StructureDecoder\optional_field;
 
 class Video
 {
+
+  /**
+   * Decode the video field into an instance of this class.
+   *
+   * @param object|array $json
+   *   The API response JSON body as decoded by `json_decode()`.
+   *
+   * @return static
+   * @throws \RightThisMinute\StructureDecoder\exceptions\DecodeError
+   */
   public static function fromJSON ($json) : self
   {
     $image = function($v) { return Image::fromJSON($v); };
