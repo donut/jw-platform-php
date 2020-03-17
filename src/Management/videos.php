@@ -33,5 +33,5 @@ function show (Client $client, string $video_key) : ?VideosShowBody
   if (!($response_body instanceof SuccessJSONBody))
     throw new UnexpectedResponseBody($endpoint, $response_body);
 
-  return VideosShowBody::fromJSON($response_body->json);
+  return new VideosShowBody($response_body->json);
 }
