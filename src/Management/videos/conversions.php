@@ -8,6 +8,7 @@ namespace RightThisMinute\JWPlatform\Management\videos\conversions;
 use RightThisMinute\JWPlatform\exception\UnexpectedResponseBody;
 use RightThisMinute\JWPlatform\Management\Client;
 use RightThisMinute\JWPlatform\Management\response\NotFoundBody;
+use RightThisMinute\JWPlatform\Management\response\SuccessBody;
 use RightThisMinute\JWPlatform\Management\response\SuccessJSONBody;
 use RightThisMinute\JWPlatform\Management\response\VideosConversionsCreateBody;
 use RightThisMinute\JWPlatform\Management\response\VideosConversionsListBody;
@@ -39,6 +40,33 @@ function create (Client $client, string $video_key, string $template_key)
     throw new UnexpectedResponseBody($endpoint, $response_body);
 
   return new VideosConversionsCreateBody($response_body->json);
+}
+
+
+/**
+ * @param \RightThisMinute\JWPlatform\Management\Client $client
+ * @param string $conversion_key
+ *
+ * @return \RightThisMinute\JWPlatform\Management\response\SuccessBody|null
+ * @throws \RightThisMinute\JWPlatform\exception\URLTooLong
+ * @throws \RightThisMinute\JWPlatform\exception\UnexpectedResponse
+ * @throws \RightThisMinute\JWPlatform\exception\UnexpectedResponseBody
+ * @throws \RightThisMinute\StructureDecoder\exceptions\DecodeError
+ */
+function delete (Client $client, string $conversion_key) : ?SuccessBody
+{
+  $endpoint = '/videos/conversions/delete';
+  $form_data = ['conversion_key' => $conversion_key];
+
+  $response_body = $client->post($endpoint, [], $form_data);
+
+  if ($response_body instanceof NotFoundBody)
+    return null;
+
+  if ($response_body instanceof SuccessBody)
+    return $response_body;
+
+  throw new UnexpectedResponseBody($endpoint, $response_body);
 }
 
 
