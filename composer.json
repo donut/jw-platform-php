@@ -30,7 +30,8 @@
         },
         "files": [
             "src/common.php",
-            "src/Management/videos.php"
+            "src/Management/videos.php",
+            "src/Management/videos/conversions.php"
         ]
     }
 }

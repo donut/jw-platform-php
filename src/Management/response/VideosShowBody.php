@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace RightThisMinute\JWPlatform\Management\videos;
 
 
+use RightThisMinute\JWPlatform\Management\response\DecoderTrait;
 use RightThisMinute\JWPlatform\Management\response\RateLimitField;
 use RightThisMinute\JWPlatform\Management\response\SuccessBody;
 use function RightThisMinute\StructureDecoder\field;
 use RightThisMinute\StructureDecoder\types as T;
 use function RightThisMinute\StructureDecoder\optional_field;
+
 
 class VideosShowBody extends SuccessBody
 {
@@ -21,8 +23,6 @@ class VideosShowBody extends SuccessBody
   public function __construct ($data)
   {
     parent::__construct($data);
-    $this->rate_limit =
-      field($data, 'rate_limit', RateLimitField::decoder());
     $this->video = field($data, 'video', VideoField::decoder());
   }
 }
@@ -30,10 +30,7 @@ class VideosShowBody extends SuccessBody
 
 class VideoField
 {
-  public static function decoder () : callable
-  {
-    return function ($v) : static { return new static($v); };
-  }
+  use DecoderTrait;
 
   /**
    * @var string
@@ -210,23 +207,23 @@ class VideoField
 
 class VideoErrorField
 {
-  public static function decoder () : callable
-  {
-    return function ($json) : static
-    {
-      return new self(field($json, 'message', T\string()));
-    };
-  }
-
+  use DecoderTrait;
 
   /**
    * @var string
    */
-  private $message;
+  public $message;
 
-  public function __construct (string $message)
+  /**
+   * VideoErrorField constructor.
+   *
+   * @param object|array $data
+   *
+   * @throws \RightThisMinute\StructureDecoder\exceptions\DecodeError
+   */
+  public function __construct ($data)
   {
-    $this->message = $message;
+    $this->message = field($data, 'message', T\string());
   }
 
 }

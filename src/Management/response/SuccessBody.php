@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 
 namespace RightThisMinute\JWPlatform\Management\response;
@@ -13,7 +14,12 @@ abstract class SuccessBody extends ResponseBody
   /**
    * SuccessBody constructor.
    *
-   * @param object|array $data
+   * @param object|array $data =
+   *   [ 'status' => 'ok'
+   *   , 'rate_limit' =>
+   *      [ 'reset' => 1584408530
+   *      , 'limit' => 60
+   *      , 'remaining' => 39 ]]
    *
    * @throws \RightThisMinute\StructureDecoder\exceptions\DecodeError
    */
