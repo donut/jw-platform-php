@@ -75,7 +75,7 @@ class Client
   public function get (string $endpoint, array $query=[]) : ResponseBody
   {
     $signed_query = $this->addRequiredParametersToQuery($query);
-    $uri = $this->build_uri($endpoint, $signed_query);
+    $uri = $this->buildURI($endpoint, $signed_query);
 
     $response = $this->guzzle->get($uri);
 
@@ -105,7 +105,7 @@ class Client
     : ResponseBody
   {
     $signed_query = $this->addRequiredParametersToQuery($query, $form_data);
-    $uri = $this->build_uri($endpoint, $signed_query);
+    $uri = $this->buildURI($endpoint, $signed_query);
 
     $response = $this->guzzle->post($uri, ['form_params' => $form_data]);
 
@@ -152,7 +152,7 @@ class Client
   }
 
 
-  private function build_uri (string $endpoint, array $signed_query) : string
+  private function buildURI (string $endpoint, array $signed_query) : string
   {
     $endpoint = trim($endpoint, '/');
     $signed_query = http_build_query($signed_query);
