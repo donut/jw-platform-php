@@ -96,7 +96,7 @@ class ConversionTemplateField
   /** @var bool */
   public $required;
 
-  /** @var \RightThisMinute\JWPlatform\Management\response\ConversionTemplateFormatField */
+  /** @var \RightThisMinute\JWPlatform\Management\response\TemplateFormatField */
   public $format;
 
   /** @var string */
@@ -119,36 +119,10 @@ class ConversionTemplateField
   {
     $this->required = field($data, 'required', T\bool());
     $this->format =
-      field($data, 'format', ConversionTemplateFormatField::decoder());
+      field($data, 'format', TemplateFormatField::decoder());
     $this->id = field($data, 'id', T\string());
     $this->key = field($data, 'key', T\string());
     $this->name = field($data, 'name', T\string());
-  }
-
-}
-
-
-class ConversionTemplateFormatField
-{
-  use DecoderTrait;
-
-  /** @var string */
-  public $name;
-
-  /** @var string */
-  public $key;
-
-  /**
-   * ConversionTemplateFormatField constructor.
-   *
-   * @param object|array $data
-   *
-   * @throws \RightThisMinute\StructureDecoder\exceptions\DecodeError
-   */
-  public function __construct ($data)
-  {
-    $this->name = field($data, 'name', T\string());
-    $this->key = field($data, 'key', T\string());
   }
 
 }
