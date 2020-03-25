@@ -32,5 +32,4 @@ class TemplateFormatField
     $this->name = field($data, 'name', T\string());
     $this->key = field($data, 'key', T\string());
   }
-
 }

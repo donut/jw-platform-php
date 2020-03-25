@@ -7,6 +7,7 @@ namespace RightThisMinute\JWPlatform\Management\response;
 
 use function RightThisMinute\StructureDecoder\field;
 use RightThisMinute\StructureDecoder\types as T;
+use function RightThisMinute\StructureDecoder\optional_field;
 
 
 class VideosConversionsListBody extends SuccessBody
@@ -64,6 +65,9 @@ class ConversionsFieldItem
   /** @var string */
   public $duration;
 
+  /** @var \RightThisMinute\JWPlatform\Management\response\ConversionErrorField|null */
+  public $error;
+
 
   /**
    * ConversionsFieldItem constructor.
@@ -81,10 +85,12 @@ class ConversionsFieldItem
     $this->height = field($data, 'height', T\int());
     $this->width = field($data, 'width', T\int());
     $this->link =
-      field($data, 'link', ConversionLinkField::decoder());
+      optional_field($data, 'link', ConversionLinkField::decoder());
     $this->filesize = field($data, 'filesize', T\string());
     $this->key = field($data, 'key', T\string());
     $this->duration = field($data, 'duration', T\string());
+    $this->error =
+      optional_field($data, 'error', ConversionErrorField::decoder());
   }
 }
 
@@ -153,5 +159,30 @@ class ConversionLinkField
     $this->path = field($data, 'path', T\string());
     $this->protocol = field($data, 'protocol', T\string());
     $this->address = field($data, 'address', T\string());
+  }
+}
+
+
+class ConversionErrorField
+{
+  use DecoderTrait;
+
+  /** @var string */
+  public $message;
+
+  /** @var int */
+  public $id;
+
+  /**
+   * ConversionErrorField constructor.
+   *
+   * @param $data
+   *
+   * @throws \RightThisMinute\StructureDecoder\exceptions\DecodeError
+   */
+  public function __construct ($data)
+  {
+    $this->message = field($data, 'message', T\string());
+    $this->id = field($data, 'id', T\int());
   }
 }
