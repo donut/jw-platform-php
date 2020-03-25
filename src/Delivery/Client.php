@@ -99,8 +99,17 @@ class Client
     $playlist = $this->getPlaylist($id, $page['response']);
 
     do {
-      if (!isset($playlist))
-        return $pages;
+      if (!isset($playlist)) {
+        if (!isset($next_page_uri))
+          return $pages;
+
+        # JW shouldn't return a 404 error for the next page of results if it
+        # gave us the URL for that page. Either the playlist was removed or
+        # something else wonky is going on. We want to error out since this
+        # may not be the complete list of results.
+        throw new UnexpectedResponse
+          ("[GET $next_page_uri]", $page['response']);
+      }
 
       $page['playlist'] = $playlist;
       $pages[] = $page;
@@ -112,8 +121,9 @@ class Client
       # the same response value since it is passed by reference when making
       # the request..
       $page = [];
+      $next_page_uri = $playlist->links->next;
       $playlist = $this->getPlaylist_byURI
-        ($playlist->links->next, $page['response']);
+        ($next_page_uri, $page['response']);
     } while (true);
   }
 }
