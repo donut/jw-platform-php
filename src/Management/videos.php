@@ -12,6 +12,8 @@ use RightThisMinute\JWPlatform\Management\response\SuccessBody;
 use RightThisMinute\JWPlatform\Management\response\SuccessJSONBody;
 use RightThisMinute\JWPlatform\Management\response\VideosShowBody;
 use function Functional\map;
+use function Functional\reduce_left;
+use function Functional\reject;
 
 /**
  * @param \RightThisMinute\JWPlatform\Management\Client $client
@@ -102,4 +104,76 @@ function update (Client $client, string $video_key, array $values)
     return $response_body;
 
   throw new UnexpectedResponseBody($endpoint, $response_body);
+}
+
+
+/**
+ * Add the passed tags to a video.
+ *
+ * @param \RightThisMinute\JWPlatform\Management\Client $client
+ * @param string $video_key
+ * @param string[] $tags
+ *
+ * @return string[]|null
+ *   The final list of tags. NULL if no video is found with $video_key.
+ *
+ * @throws \RightThisMinute\JWPlatform\exception\URLTooLong
+ * @throws \RightThisMinute\JWPlatform\exception\UnexpectedResponse
+ * @throws \RightThisMinute\JWPlatform\exception\UnexpectedResponseBody
+ * @throws \RightThisMinute\StructureDecoder\exceptions\DecodeError
+ */
+function add_tags (Client $client, string $video_key, array $tags) : ?array
+{
+  $video = show($client, $video_key);
+  if (!isset($video))
+    return null;
+
+  $existing = $video->video->tags;
+  $updated = reduce_left($tags, function($tag, $_, $__, $acc){
+    if (in_array($tag, $acc))
+      return $acc;
+
+    $acc[] = $tag;
+    return $acc;
+  }, $existing);
+
+  if (count($updated) === count($existing))
+    return $existing;
+
+  $response = update($client, $video_key, ['tags' => $updated]);
+  return isset($response) ? $updated : null;
+}
+
+
+/**
+ * Remove the passed tags from a video.
+ *
+ * @param \RightThisMinute\JWPlatform\Management\Client $client
+ * @param string $video_key
+ * @param string[] $tags
+ *
+ * @return string[]|null
+ *   The final list of tags. NULL if the video does not exist.
+ *
+ * @throws \RightThisMinute\JWPlatform\exception\URLTooLong
+ * @throws \RightThisMinute\JWPlatform\exception\UnexpectedResponse
+ * @throws \RightThisMinute\JWPlatform\exception\UnexpectedResponseBody
+ * @throws \RightThisMinute\StructureDecoder\exceptions\DecodeError
+ */
+function remove_tags (Client $client, string $video_key, array $tags) : ?array
+{
+  $video = show($client, $video_key);
+  if (!isset($video))
+    return null;
+
+  $existing = $video->video->tags;
+  $updated = reject($existing, function ($tag) use ($tags) {
+    return in_array($tag, $tags);
+  });
+
+  if (count($updated) === count($existing))
+    return $existing;
+
+  $response = update($client, $video_key, ['tags' => $updated]);
+  return isset($response) ? $updated : null;
 }
