@@ -10,13 +10,15 @@ use RightThisMinute\JWPlatform\Management\Client;
 use RightThisMinute\JWPlatform\Management\response\NotFoundBody;
 use RightThisMinute\JWPlatform\Management\response\SuccessBody;
 use RightThisMinute\JWPlatform\Management\response\SuccessJSONBody;
+use RightThisMinute\JWPlatform\Management\response\VideosShowBody;
 use function Functional\map;
 
 /**
  * @param \RightThisMinute\JWPlatform\Management\Client $client
  * @param string $video_key
  *
- * @return \RightThisMinute\JWPlatform\Management\videos\VideosShowBody|null
+ * @return \RightThisMinute\JWPlatform\Management\response\VideosShowBody|null
+ *
  * @throws \RightThisMinute\JWPlatform\exception\URLTooLong
  * @throws \RightThisMinute\JWPlatform\exception\UnexpectedResponse
  * @throws \RightThisMinute\JWPlatform\exception\UnexpectedResponseBody
