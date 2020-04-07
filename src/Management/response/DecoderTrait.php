@@ -9,6 +9,6 @@ trait DecoderTrait
 {
   public static function decoder () : callable
   {
-    return function ($data) : static { return new static($data); };
+    return function ($data) : self { return new static($data); };
   }
 }
