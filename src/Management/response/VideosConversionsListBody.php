@@ -105,7 +105,7 @@ class ConversionTemplateField
   /** @var \RightThisMinute\JWPlatform\Management\response\TemplateFormatField */
   public $format;
 
-  /** @var string */
+  /** @var int */
   public $id;
 
   /** @var string */
@@ -126,7 +126,7 @@ class ConversionTemplateField
     $this->required = field($data, 'required', T\bool());
     $this->format =
       field($data, 'format', TemplateFormatField::decoder());
-    $this->id = field($data, 'id', T\string());
+    $this->id = field($data, 'id', T\int());
     $this->key = field($data, 'key', T\string());
     $this->name = field($data, 'name', T\string());
   }
