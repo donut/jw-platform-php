@@ -164,7 +164,7 @@ class VideoField
     $tags = function($v) {
       $tags = T\string()($v);
       return preg_split
-      ('/(\s*,\s*)+/', $tags, PREG_SPLIT_NO_EMPTY);
+        ('/(\s*,\s*)+/', $tags, -1, PREG_SPLIT_NO_EMPTY);
     };
 
     $this->key = field($data, 'key', T\string());
