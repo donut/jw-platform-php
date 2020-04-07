@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 
-namespace RightThisMinute\JWPlatform\Management\videos;
+namespace RightThisMinute\JWPlatform\Management\response;
 
 
 use RightThisMinute\JWPlatform\Management\response\DecoderTrait;
