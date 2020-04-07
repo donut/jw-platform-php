@@ -62,7 +62,7 @@ class ConversionsFieldItem
   /** @var string */
   public $key;
 
-  /** @var string */
+  /** @var int|string */
   public $duration;
 
   /** @var \RightThisMinute\JWPlatform\Management\response\ConversionErrorField|null */
@@ -88,7 +88,8 @@ class ConversionsFieldItem
       optional_field($data, 'link', ConversionLinkField::decoder());
     $this->filesize = field($data, 'filesize', T\string());
     $this->key = field($data, 'key', T\string());
-    $this->duration = field($data, 'duration', T\string());
+    $this->duration =
+      field($data, 'duration', T\first_of(T\int(), T\string()));
     $this->error =
       optional_field($data, 'error', ConversionErrorField::decoder());
   }
