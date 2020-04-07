@@ -28,8 +28,8 @@ class VideosConversionsListBody extends SuccessBody
   {
     parent::__construct($data);
     $this->constructResultLimitTrait($data);
-    $this->conversions =
-      field($data, 'conversions', ConversionsFieldItem::decoder());
+    $this->conversions = field
+      ($data, 'conversions', T\array_of(ConversionsFieldItem::decoder()));
   }
 }
 

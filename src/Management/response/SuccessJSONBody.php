@@ -8,7 +8,6 @@ use function RightThisMinute\StructureDecoder\field;
 
 class SuccessJSONBody extends SuccessBody
 {
-
   /**
    * @var object|array
    */
