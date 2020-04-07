@@ -133,7 +133,8 @@ class Client
         , JSON_THROW_ON_ERROR );
     }
     catch (\Exception $exn) {
-      throw new UnexpectedResponse("[$method $uri]", $response);
+      throw new UnexpectedResponse
+        ("$method $uri", $response, $exn);
     }
 
     switch ($response->getStatusCode()) {

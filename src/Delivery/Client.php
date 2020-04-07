@@ -66,7 +66,7 @@ class Client
       return null;
 
     if ($response->getStatusCode() !== 200)
-      throw new UnexpectedResponse("[GET $uri]", $response);
+      throw new UnexpectedResponse("GET $uri", $response);
 
     $body = json_decode
       ( $response->getBody()->getContents()
@@ -108,7 +108,7 @@ class Client
         # something else wonky is going on. We want to error out since this
         # may not be the complete list of results.
         throw new UnexpectedResponse
-          ("[GET $next_page_uri]", $page['response']);
+          ("GET $next_page_uri", $page['response']);
       }
 
       $page['playlist'] = $playlist;

@@ -14,7 +14,7 @@ class UnexpectedResponseBody extends \Exception
   {
     if ($body instanceof ErrorBody)
       parent::__construct
-        ("[$request_description] {$body->message}", $body->code);
+        ("[$request_description] ({$body->code}) {$body->message}");
 
     else {
       $class = get_class($body);
