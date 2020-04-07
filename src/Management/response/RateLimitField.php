@@ -25,17 +25,17 @@ class RateLimitField
   /**
    * @var int
    */
-  private $reset;
+  public $reset;
 
   /**
    * @var int
    */
-  private $limit;
+  public $limit;
 
   /**
    * @var int
    */
-  private $remaining;
+  public $remaining;
 
   /**
    * RateLimitField constructor.

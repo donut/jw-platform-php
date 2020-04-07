@@ -18,7 +18,7 @@ class VideosShowBody extends SuccessBody
   /**
    * @var \RightThisMinute\JWPlatform\Management\videos\VideoField
    */
-  private $video;
+  public $video;
 
   public function __construct ($data)
   {
