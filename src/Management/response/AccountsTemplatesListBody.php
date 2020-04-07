@@ -9,9 +9,33 @@ use function RightThisMinute\StructureDecoder\field;
 use RightThisMinute\StructureDecoder\types as T;
 use function RightThisMinute\StructureDecoder\optional_field;
 
-
 class AccountsTemplatesListBody extends SuccessBody
 {
+  use ResultListTrait;
+
+  /** @var \RightThisMinute\JWPlatform\Management\response\TemplatesFieldItem[] */
+  public $templates;
+
+  /**
+   * AccountsTemplatesListBody constructor.
+   *
+   * @param $data
+   *
+   * @throws \RightThisMinute\StructureDecoder\exceptions\DecodeError
+   */
+  public function __construct ($data)
+  {
+    parent::__construct($data);
+    $this->templates = field
+      ($data, 'templates', T\array_of(TemplatesFieldItem::decoder()));
+  }
+}
+
+
+class TemplatesFieldItem
+{
+  use DecoderTrait;
+
   /** @var string */
   public $name;
 
@@ -40,10 +64,15 @@ class AccountsTemplatesListBody extends SuccessBody
   public $required;
 
 
+  /**
+   * TemplatesFieldItem constructor.
+   *
+   * @param $data
+   *
+   * @throws \RightThisMinute\StructureDecoder\exceptions\DecodeError
+   */
   public function __construct ($data)
   {
-    parent::__construct($data);
-
     $this->name = field($data, 'name', T\string());
     $this->format =
       field($data, 'format', TemplateFormatField::decoder());
