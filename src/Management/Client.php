@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace RightThisMinute\JWPlatform\Management;
 
 
-use Jwplayer\JwplatformAPI;
 use Psr\Http\Message\ResponseInterface;
 use RightThisMinute\JWPlatform\exception\UnexpectedResponse;
 use RightThisMinute\JWPlatform\exception\URLTooLong;
@@ -36,7 +35,6 @@ class Client
    * @var \GuzzleHttp\Client
    */
   private $guzzle;
-
 
   /**
    * Client constructor.
