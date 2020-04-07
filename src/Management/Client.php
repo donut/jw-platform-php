@@ -169,7 +169,9 @@ class Client
   private function addRequiredParametersToQuery
     (array $query, array $form_data=[]) : array
   {
-    $nonce = str_pad(mt_rand(0, 99999999), 8, STR_PAD_LEFT);
+    $nonce = str_pad
+      ( (string)mt_rand(0, 99999999)
+      , 8, ' ',  STR_PAD_LEFT );
 
     $required =
       [ 'api_nonce' => $nonce
@@ -179,7 +181,7 @@ class Client
       , 'api_kit' => static::API_KIT ];
     $query = array_merge($required, $query);
 
-    $query['signature'] = $this->generateSignature($query, $form_data);
+    $query['api_signature'] = $this->generateSignature($query, $form_data);
 
     return $query;
   }
@@ -191,8 +193,8 @@ class Client
     $parameters = array_merge($query, $form_data);
     ksort($parameters);
     $parameters = map($parameters, function ($value, $key) {
-      $key = rawurlencode($key);
-      $value = rawurlencode($value);
+      $key = rawurlencode((string)$key);
+      $value = rawurlencode((string)$value);
       return "$key=$value";
     });
     $parameters = implode('&', $parameters);
