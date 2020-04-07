@@ -11,10 +11,16 @@ use Psr\Http\Message\ResponseInterface;
 class UnexpectedResponse extends \Exception
 {
   public function __construct
-    (string $request_description, ResponseInterface $response)
+    ( string $request_description
+    , ResponseInterface $response
+    , ?\Throwable $exn=null )
   {
+    $status = $response->getStatusCode();
+    $reason = $response->getReasonPhrase();
+
     parent::__construct
-      ( "Unexpected responose to request: $request_description"
-      , $response->getStatusCode() );
+      ( "Unexpected response [$status $reason] to request [$request_description]: $exn"
+      , $response->getStatusCode()
+      , $exn );
   }
 }
