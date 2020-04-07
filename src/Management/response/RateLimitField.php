@@ -9,18 +9,7 @@ use RightThisMinute\StructureDecoder\types as T;
 
 class RateLimitField
 {
-
-  /**
-   * Returns a function for decoding structured data into an instance of this
-   * class.
-   *
-   * @return callable
-   * @throws \RightThisMinute\StructureDecoder\exceptions\DecodeError
-   */
-  static public function decoder () : callable
-  {
-    return function($v){ return new static($v); };
-  }
+  use DecoderTrait;
 
   /**
    * @var int
