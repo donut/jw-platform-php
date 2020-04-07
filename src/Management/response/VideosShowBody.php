@@ -68,7 +68,7 @@ class VideoField
   public $error;
 
   /**
-   * @var array
+   * @var string[]
    */
   public $tags;
 
