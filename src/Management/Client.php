@@ -9,6 +9,8 @@ use Psr\Http\Message\ResponseInterface;
 use RightThisMinute\JWPlatform\exception\UnexpectedResponse;
 use RightThisMinute\JWPlatform\exception\URLTooLong;
 use RightThisMinute\JWPlatform\Management\response\BadRequestBody;
+use RightThisMinute\JWPlatform\Management\response\ConflictBody;
+use RightThisMinute\JWPlatform\Management\response\MethodNotAllowedBody;
 use RightThisMinute\JWPlatform\Management\response\NotFoundBody;
 use RightThisMinute\JWPlatform\Management\response\ResponseBody;
 use RightThisMinute\JWPlatform\Management\response\SuccessJSONBody;
@@ -141,6 +143,12 @@ class Client
 
       case 404:
         return new NotFoundBody($json);
+
+      case 405:
+        return new MethodNotAllowedBody($json);
+
+      case 409:
+        return new ConflictBody($json);
 
       case 429:
         return new TooManyRequestsBody($json);
