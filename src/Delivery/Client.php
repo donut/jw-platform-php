@@ -56,6 +56,7 @@ class Client
    * @return \RightThisMinute\JWPlatform\Delivery\response\PlaylistBody|null
    * @throws \RightThisMinute\JWPlatform\exception\UnexpectedResponse
    * @throws \RightThisMinute\StructureDecoder\exceptions\DecodeError
+   * @throws \JsonException
    */
   public function getPlaylist_byURI (string $uri, ?ResponseInterface &$response)
     : ?PlaylistBody
@@ -90,6 +91,7 @@ class Client
    *
    * @throws \RightThisMinute\JWPlatform\exception\UnexpectedResponse
    * @throws \RightThisMinute\StructureDecoder\exceptions\DecodeError
+   * @throws \JsonException
    */
   public function getPlaylist_allPages (string $id) : array
   {

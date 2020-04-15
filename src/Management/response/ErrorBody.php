@@ -8,7 +8,7 @@ use function RightThisMinute\StructureDecoder\field;
 use RightThisMinute\StructureDecoder\types as T;
 
 
-abstract class ErrorBody extends ResponseBody
+class ErrorBody extends ResponseBody
 {
   /**
    * @var string
