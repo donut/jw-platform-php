@@ -7,7 +7,7 @@ namespace RightThisMinute\JWPlatform\Management\response;
 use function RightThisMinute\StructureDecoder\field;
 
 
-abstract class ErrorWithRateLimitBody extends ErrorBody
+class ErrorWithRateLimitBody extends ErrorBody
 {
   use RateLimitTrait;
 

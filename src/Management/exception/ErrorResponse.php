@@ -14,14 +14,30 @@ abstract class ErrorResponse extends ResponseBase
   /** @var ErrorBody */
   public $body;
 
+  /**
+   * ErrorResponse constructor.
+   *
+   * @param string $method
+   * @param string $uri
+   * @param \Psr\Http\Message\ResponseInterface $response
+   * @param object|ErrorBody $body
+   *   Either the decoded JSON object from the response body or an instance
+   *   of ErrorBody.
+   *
+   * @throws \RightThisMinute\StructureDecoder\exceptions\DecodeError
+   */
   public function __construct
     ( string $method
-    , string $endpoint
+    , string $uri
     , ResponseInterface $response
-    , ErrorBody $body )
+    , object $body )
   {
-    $this->body = $body;
-    $message = "({$body->code}) {$body->message}";
-    parent::__construct($method, $endpoint, $message, $response);
+    if ($body instanceof ErrorBody)
+      $this->body;
+    else
+      $this->body = new ErrorBody($body);
+
+    $message = "({$this->body->code}) {$this->body->message}";
+    parent::__construct($method, $uri, $message, $response);
   }
 }
