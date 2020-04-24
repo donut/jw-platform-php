@@ -30,6 +30,7 @@
         },
         "files": [
             "src/common.php",
+            "src/Delivery/playlists.php",
             "src/Management/accounts/templates.php",
             "src/Management/videos.php",
             "src/Management/videos/conversions.php"

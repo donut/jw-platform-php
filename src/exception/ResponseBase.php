@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 
-namespace RightThisMinute\JWPlatform\Management\exception;
+namespace RightThisMinute\JWPlatform\exception;
 
 
 use Psr\Http\Message\ResponseInterface;
@@ -15,7 +15,7 @@ abstract class ResponseBase extends \Exception
 
   public function __construct
     ( string $method
-    , string $endpoint
+    , string $uri
     , string $message
     , ResponseInterface $response
     , ?int $code=null
@@ -25,7 +25,7 @@ abstract class ResponseBase extends \Exception
 
     $status_code = $response->getStatusCode();
     $status_phrase = $response->getReasonPhrase();
-    $message = "[$method $endpoint -> $status_code $status_phrase] $message";
+    $message = "[$method $uri -> $status_code $status_phrase] $message";
 
     if (!isset($code) and is_numeric($status_code))
       $code = (int)$status_code;

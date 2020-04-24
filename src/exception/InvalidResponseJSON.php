@@ -6,7 +6,7 @@ namespace RightThisMinute\JWPlatform\exception;
 
 
 use Psr\Http\Message\ResponseInterface;
-use RightThisMinute\JWPlatform\Management\exception\ResponseBase;
+use RightThisMinute\JWPlatform\exception\ResponseBase;
 
 
 class InvalidResponseJSON extends ResponseBase

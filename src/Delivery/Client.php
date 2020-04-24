@@ -5,14 +5,28 @@ declare(strict_types=1);
 namespace RightThisMinute\JWPlatform\Delivery;
 
 
-use RightThisMinute\JWPlatform\Delivery\response\PlaylistBody;
+use RightThisMinute\JWPlatform\Delivery\exception\BadRequestResponse;
+use RightThisMinute\JWPlatform\Delivery\exception\ErrorResponse;
+use RightThisMinute\JWPlatform\Delivery\exception\NotFoundResponse;
+use RightThisMinute\JWPlatform\exception\InvalidResponseJSON;
 use RightThisMinute\JWPlatform\exception\UnexpectedResponse;
 use Psr\Http\Message\ResponseInterface;
-const BASE_URI = 'https://cdn.jwplayer.com/v2/';
+use function Functional\some;
 
 
 class Client
 {
+  protected const BASE_URI = 'https://cdn.jwplayer.com/v2/';
+
+  static public function singleton () : self
+  {
+    static $client;
+
+    if (!isset($client))
+      $client = new static();
+
+    return $client;
+  }
 
   /**
    * @var \GuzzleHttp\Client
@@ -23,109 +37,102 @@ class Client
   public function __construct ()
   {
     $this->guzzle = new \GuzzleHttp\Client(
-      [ 'base_uri' => BASE_URI
+      [ 'base_uri' => static::BASE_URI
       , 'http_errors' => false ]
     );
   }
 
 
   /**
-   * @param string $id
-   * @param \Psr\Http\Message\ResponseInterface|null &$response
+   * @param string $endpoint
+   * @param array $query
+   *   [ 'format' => ['json', 'mrss', 'googledfp', 'legacyrss'][$any] ]
    *
-   * @return \RightThisMinute\JWPlatform\Delivery\response\PlaylistBody|null
-   *
-   * @throws \RightThisMinute\JWPlatform\exception\UnexpectedResponse
-   * @throws \RightThisMinute\StructureDecoder\exceptions\DecodeError
-   */
-  public function getPlaylist (string $id, ?ResponseInterface &$response=null)
-    : ?PlaylistBody
-  {
-    $path = "playlists/$id";
-    return $this->getPlaylist_byURI($path, $response);
-  }
-
-
-  /**
-   * Make a request to $uri and assume the response will be the same as
-   * /v2/playlists/{playlist ID}.
-   *
-   * @param string $uri
    * @param \Psr\Http\Message\ResponseInterface|null $response
    *
-   * @return \RightThisMinute\JWPlatform\Delivery\response\PlaylistBody|null
+   * @return object|ResponseInterface
+   *   If $query['format'] is unset or set to 'json', this will be the decoded
+   *   JSON object. Otherwise, it will be the ResponseInterface instance.
+   *
+   * @throws \RightThisMinute\JWPlatform\Delivery\exception\BadRequestResponse
+   * @throws \RightThisMinute\JWPlatform\Delivery\exception\ErrorResponse
+   * @throws \RightThisMinute\JWPlatform\Delivery\exception\NotFoundResponse
+   * @throws \RightThisMinute\JWPlatform\exception\InvalidResponseJSON
    * @throws \RightThisMinute\JWPlatform\exception\UnexpectedResponse
    * @throws \RightThisMinute\StructureDecoder\exceptions\DecodeError
-   * @throws \JsonException
    */
-  public function getPlaylist_byURI (string $uri, ?ResponseInterface &$response)
-    : ?PlaylistBody
+  public function get
+    (string $endpoint, array $query=[], ?ResponseInterface &$response=null)
+    : object
   {
+    if (!isset($query['format']))
+      $query['format'] = 'json';
+
+    $expect_json = strtolower($query['format']) === 'json';
+
+    $query = count($query) > 0 ? '?' . http_build_query($query) : '';
+    $uri = "$endpoint$query";
     $response = $this->guzzle->get($uri);
 
-    if ($response->getStatusCode() === 404)
-      return null;
+    if ($expect_json) {
+      $content_type = $response->getHeader('content-type');
+      $probably_json = some($content_type, function ($type) {
+        return $type === 'application/json'
+          || strpos($type, 'application/json;') === 0;
+      });
+      if (!$probably_json) {
+        $content_type = implode(', ', $content_type);
+        throw new UnexpectedResponse
+          ( 'GET', $uri
+          , "Expected JSON, got $content_type."
+          , $response );
+      }
 
-    if ($response->getStatusCode() !== 200)
-      throw new UnexpectedResponse("GET $uri", $response);
+      return $this->processJSONResponse('GET', $uri, $response);
+    }
 
-    $body = json_decode
-      ( $response->getBody()->getContents()
-      , false
-      , 512 #default
-      , JSON_THROW_ON_ERROR );
-
-    return PlaylistBody::fromJSON($body);
+    return $response;
   }
 
 
   /**
-   * Returns all pages of results of a request to /v2/playlists/{playlist ID}.
+   * @param string $method
+   * @param string $uri
+   * @param \Psr\Http\Message\ResponseInterface $response
    *
-   * @param string $id
-   *   The playlist ID (sometimes called 'media ID' or 'feedid' or 'key' by JW.
-   *
-   * @return array [
-   *    ['playlist' => PlaylistBody, 'response' => ResponseInterface]
-   * ]
-   *
-   * @throws \RightThisMinute\JWPlatform\exception\UnexpectedResponse
+   * @return object
+   * @throws \RightThisMinute\JWPlatform\Delivery\exception\BadRequestResponse
+   * @throws \RightThisMinute\JWPlatform\Delivery\exception\ErrorResponse
+   * @throws \RightThisMinute\JWPlatform\Delivery\exception\NotFoundResponse
+   * @throws \RightThisMinute\JWPlatform\exception\InvalidResponseJSON
    * @throws \RightThisMinute\StructureDecoder\exceptions\DecodeError
-   * @throws \JsonException
    */
-  public function getPlaylist_allPages (string $id) : array
+  protected function processJSONResponse
+    (string $method, string $uri, ResponseInterface $response) : object
   {
-    $pages = [];
+    try {
+      $json = json_decode
+        ( $response->getBody()->getContents()
+        , false
+        , 512 #default
+        , JSON_THROW_ON_ERROR );
+    }
+    catch (\JsonException $exn) {
+      throw new InvalidResponseJSON($method, $uri, $response, $exn);
+    }
 
-    $page = [];
-    $playlist = $this->getPlaylist($id, $page['response']);
+    switch ($response->getStatusCode()) {
+      case 200:
+        return $json;
 
-    do {
-      if (!isset($playlist)) {
-        if (!isset($next_page_uri))
-          return $pages;
+      case 400:
+        throw new BadRequestResponse($method, $uri, $response, $json);
 
-        # JW shouldn't return a 404 error for the next page of results if it
-        # gave us the URL for that page. Either the playlist was removed or
-        # something else wonky is going on. We want to error out since this
-        # may not be the complete list of results.
-        throw new UnexpectedResponse
-          ("GET $next_page_uri", $page['response']);
-      }
+      case 404:
+        throw new NotFoundResponse($method, $uri, $response, $json);
 
-      $page['playlist'] = $playlist;
-      $pages[] = $page;
-
-      if (!isset($playlist->links->next))
-        return $pages;
-
-      # Need to redefine this structure every time to avoid all pages having
-      # the same response value since it is passed by reference when making
-      # the request..
-      $page = [];
-      $next_page_uri = $playlist->links->next;
-      $playlist = $this->getPlaylist_byURI
-        ($next_page_uri, $page['response']);
-    } while (true);
+      default:
+        throw new ErrorResponse($method, $uri, $response, $json);
+    }
   }
 }
