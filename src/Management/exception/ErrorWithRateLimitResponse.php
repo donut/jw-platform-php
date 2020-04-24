@@ -20,6 +20,6 @@ class ErrorWithRateLimitResponse extends ErrorResponse
     , object $json_body )
   {
     $body = new ErrorWithRateLimitBody($json_body);
-    parent::__construct($uri, $uri, $response, $body);
+    parent::__construct($method, $uri, $response, $body);
   }
 }
