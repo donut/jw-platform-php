@@ -13,13 +13,13 @@ class InvalidResponseJSON extends ResponseBase
 {
   public function __construct
     ( string $method
-    , string $endpoint
+    , string $uri
     , ResponseInterface $response
     , \JsonException $exception )
   {
     parent::__construct
       ( $method
-      , $endpoint
+      , $uri
       , "Error parsing response body as JSON: "
         . $exception->getMessage()
       , $response
