@@ -6,6 +6,7 @@ namespace RightThisMinute\JWPlatform\Management\exception;
 
 
 use Psr\Http\Message\ResponseInterface;
+use RightThisMinute\JWPlatform\exception\ResponseBase;
 use RightThisMinute\JWPlatform\Management\response\ErrorBody;
 
 
@@ -33,7 +34,7 @@ abstract class ErrorResponse extends ResponseBase
     , object $body )
   {
     if ($body instanceof ErrorBody)
-      $this->body;
+      $this->body = $body;
     else
       $this->body = new ErrorBody($body);
 
