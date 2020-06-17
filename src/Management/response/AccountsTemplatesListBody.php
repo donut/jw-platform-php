@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace RightThisMinute\JWPlatform\Management\response;
 
 
+use RightThisMinute\JWPlatform\common\DecoderTrait;
 use function RightThisMinute\StructureDecoder\field;
 use RightThisMinute\StructureDecoder\types as T;
 use function RightThisMinute\StructureDecoder\optional_field;

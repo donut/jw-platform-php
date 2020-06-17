@@ -4,48 +4,15 @@
 namespace RightThisMinute\JWPlatform\Delivery\response;
 
 
+use RightThisMinute\JWPlatform\common\DecoderTrait;
 use function RightThisMinute\StructureDecoder\field;
 use RightThisMinute\StructureDecoder\types as T;
 use function RightThisMinute\StructureDecoder\optional_field;
 
+
 class Video
 {
-
-  /**
-   * Decode the video field into an instance of this class.
-   *
-   * @param object|array $json
-   *   The API response JSON body as decoded by `json_decode()`.
-   *
-   * @return static
-   * @throws \RightThisMinute\StructureDecoder\exceptions\DecodeError
-   */
-  public static function fromJSON ($json) : self
-  {
-    $image = function($v) { return Image::fromJSON($v); };
-
-    $tags = function($v) {
-      $tags = T\string()($v);
-      return preg_split
-        ('/(\s*,\s*)+/', $tags, PREG_SPLIT_NO_EMPTY);
-    };
-
-    $source = function($v) { return Source::fromJSON($v); };
-
-    return new self
-      ( field($json, 'mediaid', T\string())
-      , field($json, 'title', T\string())
-      , field($json, 'description', T\string())
-      , field($json, 'duration', T\int())
-      , field($json, 'pubdate', T\int())
-      , field($json, 'link', T\string())
-      , field($json, 'image', T\string())
-      , field($json, 'images', T\array_of($image))
-      , field($json, 'tags', $tags)
-      , field($json, 'variations', T\object())
-      , field($json, 'sources', T\array_of($source))
-      , optional_field($json, 'feedid', T\string()) );
-  }
+  use DecoderTrait;
 
   /** @var string */
   public $mediaid;
@@ -86,45 +53,28 @@ class Video
   /**
    * Video constructor.
    *
-   * @param string $mediaid
-   * @param string $title
-   * @param string $description
-   * @param int $duration
-   * @param int $pubdate
-   * @param string $link
-   * @param string $image
-   * @param Image[] $images
-   * @param string[] $tags
-   * @param object $variations
-   * @param Source[] $sources
-   * @param string|null $feedid
    */
-  public function __construct
-    ( string $mediaid
-    , string $title
-    , string $description
-    , int $duration
-    , int $pubdate
-    , string $link
-    , string $image
-    , array $images
-    , array $tags
-    , object $variations
-    , array $sources
-    , ?string $feedid=null )
+  public function __construct ($data)
   {
-    $this->mediaid = $mediaid;
-    $this->description = $description;
-    $this->pubdate = $pubdate;
-    $this->title = $title;
-    $this->image = $image;
-    $this->tags = $tags;
-    $this->variations = $variations;
-    $this->images = $images;
-    $this->link = $link;
-    $this->duration = $duration;
-    $this->sources = $sources;
-    $this->feedid = $feedid;
+    $tags = function($v) {
+      $tags = T\string()($v);
+      return preg_split
+        ('/(\s*,\s*)+/', $tags, PREG_SPLIT_NO_EMPTY);
+    };
+
+    $this->mediaid = field($data, 'mediaid', T\string());
+    $this->title = field($data, 'title', T\string());
+    $this->description = field($data, 'description', T\string());
+    $this->duration = field($data, 'duration', T\int());
+    $this->pubdate = field($data, 'pubdate', T\int());
+    $this->link = field($data, 'link', T\string());
+    $this->image = field($data, 'image', T\string());
+    $this->images = field($data, 'images', T\array_of(Image::decoder()));
+    $this->tags = field($data, 'tags', $tags);
+    $this->variations = field($data, 'variations', T\object());
+    $this->sources = field
+      ($data, 'sources', T\array_of(Source::decoder()));
+    $this->feedid = optional_field($data, 'feedid', T\string());
   }
 
 }
@@ -132,13 +82,7 @@ class Video
 
 class Image
 {
-  public static function fromJSON ($json) : self
-  {
-    return new self
-      ( field($json, 'src', T\string())
-      , field($json, 'type', T\string())
-      , field($json, 'width', T\int()) );
-  }
+  use DecoderTrait;
 
   /** @var string */
   public $src;
@@ -149,11 +93,11 @@ class Image
   /** @var int */
   public $width;
 
-  public function __construct (string $src, string $type, int $width)
+  public function __construct ($data)
   {
-    $this->src = $src;
-    $this->type = $type;
-    $this->width = $width;
+    $this->src = field($data, 'src', T\string());
+    $this->type = field($data, 'type', T\string());
+    $this->width = field($data, 'width', T\int());
   }
 }
 
@@ -175,16 +119,7 @@ class Track
 
 class Source
 {
-  public static function fromJSON ($json) : self
-  {
-    return new self
-      ( field($json, 'file', T\string())
-      , optional_field($json, 'type', T\string())
-      , optional_field($json, 'label', T\string())
-      , optional_field($json, 'width', T\int())
-      , optional_field($json, 'height', T\int()) );
-  }
-
+  use DecoderTrait;
 
   /** @var string */
   public $file;
@@ -201,17 +136,12 @@ class Source
   /** @var int|null */
   public $height;
 
-  public function __construct
-    ( string $file
-    , ?string $type
-    , ?string $label
-    , ?int $width
-    , ?int $height )
+  public function __construct ($data)
   {
-    $this->type = $type;
-    $this->file = $file;
-    $this->label = $label;
-    $this->width = $width;
-    $this->height = $height;
+    $this->file = field($data, 'file', T\string());
+    $this->type = optional_field($data, 'type', T\string());
+    $this->label = optional_field($data, 'label', T\string());
+    $this->width = optional_field($data, 'width', T\int());
+    $this->height = optional_field($data, 'height', T\int());
   }
 }

@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 
-namespace RightThisMinute\JWPlatform\Management\response;
+namespace RightThisMinute\JWPlatform\common;
 
 
 trait DecoderTrait

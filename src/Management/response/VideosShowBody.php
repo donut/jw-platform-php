@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace RightThisMinute\JWPlatform\Management\response;
 
 
-use RightThisMinute\JWPlatform\Management\response\DecoderTrait;
-use RightThisMinute\JWPlatform\Management\response\RateLimitField;
-use RightThisMinute\JWPlatform\Management\response\SuccessBody;
+use RightThisMinute\JWPlatform\common\DecoderTrait;
 use function RightThisMinute\StructureDecoder\field;
 use RightThisMinute\StructureDecoder\types as T;
 use function RightThisMinute\StructureDecoder\optional_field;
@@ -16,7 +14,7 @@ use function RightThisMinute\StructureDecoder\optional_field;
 class VideosShowBody extends SuccessBody
 {
   /**
-   * @var \RightThisMinute\JWPlatform\Management\videos\VideoField
+   * @var VideoField
    */
   public $video;
 
@@ -63,7 +61,7 @@ class VideoField
   public $expires_date;
 
   /**
-   * @var \RightThisMinute\JWPlatform\Management\videos\VideoErrorField|null
+   * @var VideoErrorField|null
    */
   public $error;
 

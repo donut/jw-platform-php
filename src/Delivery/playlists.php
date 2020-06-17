@@ -61,7 +61,7 @@ function get
     return null;
   }
 
-  return PlaylistBody::fromJSON($body);
+  return new PlaylistBody($body);
 }
 
 
