@@ -10,25 +10,10 @@ use RightThisMinute\StructureDecoder\types as T;
 use function RightThisMinute\StructureDecoder\optional_field;
 
 
-class PlaylistBody
+class PlaylistBody extends MediaBody
 {
   /** @var string */
   public $feedid;
-
-  /** @var string */
-  public $title;
-
-  /** @var string */
-  public $description;
-
-  /** @var string */
-  public $kind;
-
-  /** @var string */
-  public $feed_instance_id;
-
-  /** @var Video[] */
-  public $playlist;
 
   /** @var Links|null */
   public $links;
@@ -39,13 +24,10 @@ class PlaylistBody
    */
   public function __construct ($data)
   {
+    parent::__construct($data);
+
     $this->feedid = field($data, 'feedid', T\string());
-    $this->title = field($data, 'title', T\string());
-    $this->description = field($data, 'description', T\string());
-    $this->kind = field($data, 'kind', T\string());
-    $this->feed_instance_id = field($data, 'feed_instance_id', T\string());
-    $this->playlist = field($data, 'playlist', T\array_of(Video::decoder()));
-    $this->links = optional_field($data, 'links', Links::decoder());
+    $this->links = otional_field($data, 'links', Links::decoder());
   }
 }
 

@@ -52,7 +52,8 @@ class Video
 
   /**
    * Video constructor.
-   *
+   * @param $data
+   * @throws \RightThisMinute\StructureDecoder\exceptions\DecodeError
    */
   public function __construct ($data)
   {
@@ -93,6 +94,11 @@ class Image
   /** @var int */
   public $width;
 
+  /**
+   * Image constructor.
+   * @param $data
+   * @throws \RightThisMinute\StructureDecoder\exceptions\DecodeError
+   */
   public function __construct ($data)
   {
     $this->src = field($data, 'src', T\string());
@@ -110,6 +116,11 @@ class Track
   /** @var string */
   public $file;
 
+  /**
+   * Track constructor.
+   * @param string $kind
+   * @param string $file
+   */
   public function __construct (string $kind, string $file)
   {
     $this->kind = $kind;
@@ -136,6 +147,11 @@ class Source
   /** @var int|null */
   public $height;
 
+  /**
+   * Source constructor.
+   * @param $data
+   * @throws \RightThisMinute\StructureDecoder\exceptions\DecodeError
+   */
   public function __construct ($data)
   {
     $this->file = field($data, 'file', T\string());
