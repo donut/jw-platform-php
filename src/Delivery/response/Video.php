@@ -71,7 +71,7 @@ class Video
     $this->link = field($data, 'link', T\string());
     $this->image = field($data, 'image', T\string());
     $this->images = field($data, 'images', T\array_of(Image::decoder()));
-    $this->tags = field($data, 'tags', $tags);
+    $this->tags = optional_field($data, 'tags', $tags, []);
     $this->variations = field($data, 'variations', T\object());
     $this->sources = field
       ($data, 'sources', T\array_of(Source::decoder()));
