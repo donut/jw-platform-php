@@ -231,15 +231,36 @@ function _prep_create_update_params (array $values) : array
 }
 
 
+/**
+ * Delete the videos at JW corresponding the list of passed media IDs.
+ *
+ * @param Client $client
+ * @param string[] $video_keys
+ *
+ * @return VideosDeleteBody|null
+ *
+ * @throws BadRequestResponse
+ * @throws ConflictResponse
+ * @throws DecodeError
+ * @throws InvalidResponseJSON
+ * @throws MethodNotAllowedResponse
+ * @throws TooManyRequestsResponse
+ * @throws URLTooLong
+ * @throws UnknownErrorResponse
+ */
+function delete (Client $client, array $video_keys) : ?VideosDeleteBody
+{
 
-  $endpoint = '/videos/update';
+  $values = ['video_key' => implode(',', $video_keys)];
 
   try {
-    return $client->post($endpoint, [], $values);
+    $response_body = $client->post('/videos/update', [], $values);
   }
   catch (NotFoundResponse $_) {
     return null;
   }
+
+  return new VideosDeleteBody($response_body->json);
 }
 
 
