@@ -5,10 +5,20 @@ declare(strict_types=1);
 namespace RightThisMinute\JWPlatform\Management\videos;
 
 
+use RightThisMinute\JWPlatform\exception\InvalidResponseJSON;
+use RightThisMinute\JWPlatform\exception\URLTooLong;
 use RightThisMinute\JWPlatform\Management\Client;
+use RightThisMinute\JWPlatform\Management\exception\BadRequestResponse;
+use RightThisMinute\JWPlatform\Management\exception\ConflictResponse;
+use RightThisMinute\JWPlatform\Management\exception\MethodNotAllowedResponse;
 use RightThisMinute\JWPlatform\Management\exception\NotFoundResponse;
+use RightThisMinute\JWPlatform\Management\exception\TooManyRequestsResponse;
+use RightThisMinute\JWPlatform\Management\exception\UnknownErrorResponse;
 use RightThisMinute\JWPlatform\Management\response\SuccessBody;
+use RightThisMinute\JWPlatform\Management\response\VideosCreateBody;
+use RightThisMinute\JWPlatform\Management\response\VideosDeleteBody;
 use RightThisMinute\JWPlatform\Management\response\VideosShowBody;
+use RightThisMinute\StructureDecoder\exceptions\DecodeError;
 use function Functional\map;
 use function Functional\reduce_left;
 use function Functional\reject;
@@ -16,21 +26,21 @@ use function Functional\reject;
 /**
  * Show the properties of a video.
  *
- * @param \RightThisMinute\JWPlatform\Management\Client $client
+ * @param Client $client
  * @param string $video_key
  *   Key of the video which information to show.
  *
  * @return \RightThisMinute\JWPlatform\Management\response\VideosShowBody|null
  *   Null if the video is not found at JW.
  *
- * @throws \RightThisMinute\JWPlatform\Management\exception\BadRequestResponse
- * @throws \RightThisMinute\JWPlatform\Management\exception\ConflictResponse
- * @throws \RightThisMinute\JWPlatform\exception\InvalidResponseJSON
- * @throws \RightThisMinute\JWPlatform\Management\exception\MethodNotAllowedResponse
- * @throws \RightThisMinute\JWPlatform\Management\exception\TooManyRequestsResponse
- * @throws \RightThisMinute\JWPlatform\Management\exception\UnknownErrorResponse
- * @throws \RightThisMinute\JWPlatform\exception\URLTooLong
- * @throws \RightThisMinute\StructureDecoder\exceptions\DecodeError
+ * @throws BadRequestResponse
+ * @throws ConflictResponse
+ * @throws InvalidResponseJSON
+ * @throws MethodNotAllowedResponse
+ * @throws TooManyRequestsResponse
+ * @throws UnknownErrorResponse
+ * @throws URLTooLong
+ * @throws DecodeError
  */
 function show (Client $client, string $video_key) : ?VideosShowBody
 {
@@ -77,17 +87,17 @@ function show (Client $client, string $video_key) : ?VideosShowBody
  *  , 'upload_method' => ['single', 'multipart', 's3'][$i]
  *  , 'upload_content_type' => 'video/mp4' ]
  *
- * @return \RightThisMinute\JWPlatform\Management\response\SuccessBody|null
+ * @return SuccessBody|null
  *  null if video is not found at JW.
  *
- * @throws \RightThisMinute\JWPlatform\Management\exception\BadRequestResponse
- * @throws \RightThisMinute\JWPlatform\Management\exception\ConflictResponse
- * @throws \RightThisMinute\JWPlatform\exception\InvalidResponseJSON
- * @throws \RightThisMinute\JWPlatform\Management\exception\MethodNotAllowedResponse
- * @throws \RightThisMinute\JWPlatform\Management\exception\TooManyRequestsResponse
- * @throws \RightThisMinute\JWPlatform\Management\exception\UnknownErrorResponse
- * @throws \RightThisMinute\JWPlatform\exception\URLTooLong
- * @throws \RightThisMinute\StructureDecoder\exceptions\DecodeError
+ * @throws BadRequestResponse
+ * @throws ConflictResponse
+ * @throws InvalidResponseJSON
+ * @throws MethodNotAllowedResponse
+ * @throws TooManyRequestsResponse
+ * @throws UnknownErrorResponse
+ * @throws URLTooLong
+ * @throws DecodeError
  */
 function update (Client $client, string $video_key, array $values)
   : ?SuccessBody
@@ -121,21 +131,21 @@ function update (Client $client, string $video_key, array $values)
 /**
  * Add the passed tags to a video.
  *
- * @param \RightThisMinute\JWPlatform\Management\Client $client
+ * @param Client $client
  * @param string $video_key
  * @param string[] $tags
  *
  * @return string[]|null
  *   The final list of tags. NULL if no video is found with $video_key.
  *
- * @throws \RightThisMinute\JWPlatform\Management\exception\BadRequestResponse
- * @throws \RightThisMinute\JWPlatform\Management\exception\ConflictResponse
- * @throws \RightThisMinute\JWPlatform\exception\InvalidResponseJSON
- * @throws \RightThisMinute\JWPlatform\Management\exception\MethodNotAllowedResponse
- * @throws \RightThisMinute\JWPlatform\Management\exception\TooManyRequestsResponse
- * @throws \RightThisMinute\JWPlatform\Management\exception\UnknownErrorResponse
- * @throws \RightThisMinute\JWPlatform\exception\URLTooLong
- * @throws \RightThisMinute\StructureDecoder\exceptions\DecodeError
+ * @throws BadRequestResponse
+ * @throws ConflictResponse
+ * @throws InvalidResponseJSON
+ * @throws MethodNotAllowedResponse
+ * @throws TooManyRequestsResponse
+ * @throws UnknownErrorResponse
+ * @throws URLTooLong
+ * @throws DecodeError
  */
 function add_tags (Client $client, string $video_key, array $tags) : ?array
 {
@@ -163,21 +173,21 @@ function add_tags (Client $client, string $video_key, array $tags) : ?array
 /**
  * Remove the passed tags from a video.
  *
- * @param \RightThisMinute\JWPlatform\Management\Client $client
+ * @param Client $client
  * @param string $video_key
  * @param string[] $tags
  *
  * @return string[]|null
  *   The final list of tags. NULL if the video does not exist.
  *
- * @throws \RightThisMinute\JWPlatform\Management\exception\BadRequestResponse
- * @throws \RightThisMinute\JWPlatform\Management\exception\ConflictResponse
- * @throws \RightThisMinute\JWPlatform\exception\InvalidResponseJSON
- * @throws \RightThisMinute\JWPlatform\Management\exception\MethodNotAllowedResponse
- * @throws \RightThisMinute\JWPlatform\Management\exception\TooManyRequestsResponse
- * @throws \RightThisMinute\JWPlatform\Management\exception\UnknownErrorResponse
- * @throws \RightThisMinute\JWPlatform\exception\URLTooLong
- * @throws \RightThisMinute\StructureDecoder\exceptions\DecodeError
+ * @throws BadRequestResponse
+ * @throws ConflictResponse
+ * @throws InvalidResponseJSON
+ * @throws MethodNotAllowedResponse
+ * @throws TooManyRequestsResponse
+ * @throws UnknownErrorResponse
+ * @throws URLTooLong
+ * @throws DecodeError
  */
 function remove_tags (Client $client, string $video_key, array $tags) : ?array
 {
