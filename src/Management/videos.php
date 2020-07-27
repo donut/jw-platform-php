@@ -30,7 +30,7 @@ use function Functional\reject;
  * @param string $video_key
  *   Key of the video which information to show.
  *
- * @return \RightThisMinute\JWPlatform\Management\response\VideosShowBody|null
+ * @return VideosShowBody|null
  *   Null if the video is not found at JW.
  *
  * @throws BadRequestResponse

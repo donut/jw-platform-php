@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace RightThisMinute\JWPlatform\Management;
 
 
+use JsonException;
 use Psr\Http\Message\ResponseInterface;
 use RightThisMinute\JWPlatform\exception\URLTooLong;
 use RightThisMinute\JWPlatform\Management\exception\BadRequestResponse;
@@ -15,6 +16,7 @@ use RightThisMinute\JWPlatform\Management\exception\NotFoundResponse;
 use RightThisMinute\JWPlatform\Management\exception\TooManyRequestsResponse;
 use RightThisMinute\JWPlatform\Management\exception\UnknownErrorResponse;
 use RightThisMinute\JWPlatform\Management\response\SuccessJSONBody;
+use RightThisMinute\StructureDecoder\exceptions\DecodeError;
 use function Functional\map;
 use const RightThisMinute\JWPlatform\common\MAX_REQUEST_URL_LENGTH;
 
@@ -65,18 +67,18 @@ class Client
    * @param string[] $query
    *   An associative array of URL query string parameters.
    *
-   * @return \RightThisMinute\JWPlatform\Management\response\SuccessJSONBody
+   * @return SuccessJSONBody
    *   The parsed JSON response or null on 404.
    *
-   * @throws \RightThisMinute\JWPlatform\Management\exception\BadRequestResponse
-   * @throws \RightThisMinute\JWPlatform\Management\exception\ConflictResponse
-   * @throws \RightThisMinute\JWPlatform\exception\InvalidResponseJSON
-   * @throws \RightThisMinute\JWPlatform\Management\exception\MethodNotAllowedResponse
-   * @throws \RightThisMinute\JWPlatform\Management\exception\NotFoundResponse
-   * @throws \RightThisMinute\JWPlatform\Management\exception\TooManyRequestsResponse
-   * @throws \RightThisMinute\JWPlatform\Management\exception\UnknownErrorResponse
-   * @throws \RightThisMinute\JWPlatform\exception\URLTooLong
-   * @throws \RightThisMinute\StructureDecoder\exceptions\DecodeError
+   * @throws BadRequestResponse
+   * @throws ConflictResponse
+   * @throws InvalidResponseJSON
+   * @throws MethodNotAllowedResponse
+   * @throws NotFoundResponse
+   * @throws TooManyRequestsResponse
+   * @throws UnknownErrorResponse
+   * @throws URLTooLong
+   * @throws DecodeError
    */
   public function get (string $endpoint, array $query=[]) : SuccessJSONBody
   {
@@ -100,18 +102,18 @@ class Client
    *   An associative array of form data parameters that will be URL encoded
    *   and sent in the request body
    *
-   * @return \RightThisMinute\JWPlatform\Management\response\SuccessJSONBody
+   * @return SuccessJSONBody
    *   The parsed JSON response or null on 404.
    *
-   * @throws \RightThisMinute\JWPlatform\Management\exception\BadRequestResponse
-   * @throws \RightThisMinute\JWPlatform\Management\exception\ConflictResponse
-   * @throws \RightThisMinute\JWPlatform\exception\InvalidResponseJSON
-   * @throws \RightThisMinute\JWPlatform\Management\exception\MethodNotAllowedResponse
-   * @throws \RightThisMinute\JWPlatform\Management\exception\NotFoundResponse
-   * @throws \RightThisMinute\JWPlatform\Management\exception\TooManyRequestsResponse
-   * @throws \RightThisMinute\JWPlatform\Management\exception\UnknownErrorResponse
-   * @throws \RightThisMinute\JWPlatform\exception\URLTooLong
-   * @throws \RightThisMinute\StructureDecoder\exceptions\DecodeError
+   * @throws BadRequestResponse
+   * @throws ConflictResponse
+   * @throws InvalidResponseJSON
+   * @throws MethodNotAllowedResponse
+   * @throws NotFoundResponse
+   * @throws TooManyRequestsResponse
+   * @throws UnknownErrorResponse
+   * @throws URLTooLong
+   * @throws DecodeError
    */
   public function post (string $endpoint, array $query=[], array $form_data=[])
     : SuccessJSONBody
@@ -128,17 +130,17 @@ class Client
   /**
    * @param string $method
    * @param string $uri
-   * @param \Psr\Http\Message\ResponseInterface $response
+   * @param ResponseInterface $response
    *
-   * @return \RightThisMinute\JWPlatform\Management\response\SuccessJSONBody
-   * @throws \RightThisMinute\JWPlatform\Management\exception\BadRequestResponse
-   * @throws \RightThisMinute\JWPlatform\Management\exception\ConflictResponse
-   * @throws \RightThisMinute\JWPlatform\exception\InvalidResponseJSON
-   * @throws \RightThisMinute\JWPlatform\Management\exception\MethodNotAllowedResponse
-   * @throws \RightThisMinute\JWPlatform\Management\exception\NotFoundResponse
-   * @throws \RightThisMinute\JWPlatform\Management\exception\TooManyRequestsResponse
-   * @throws \RightThisMinute\JWPlatform\Management\exception\UnknownErrorResponse
-   * @throws \RightThisMinute\StructureDecoder\exceptions\DecodeError
+   * @return SuccessJSONBody
+   * @throws BadRequestResponse
+   * @throws ConflictResponse
+   * @throws InvalidResponseJSON
+   * @throws MethodNotAllowedResponse
+   * @throws NotFoundResponse
+   * @throws TooManyRequestsResponse
+   * @throws UnknownErrorResponse
+   * @throws DecodeError
    */
   private function processResponse
     (string $method, string $uri, ResponseInterface $response) : SuccessJSONBody
@@ -150,7 +152,7 @@ class Client
         , 512 #default
         , JSON_THROW_ON_ERROR );
     }
-    catch (\JsonException $exn) {
+    catch (JsonException $exn) {
       throw new InvalidResponseJSON($method, $uri, $response, $exn);
     }
 
