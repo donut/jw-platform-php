@@ -6,6 +6,7 @@ namespace RightThisMinute\JWPlatform\Management\response;
 
 
 use RightThisMinute\JWPlatform\common\DecoderTrait;
+use RightThisMinute\StructureDecoder\exceptions\DecodeError;
 use function RightThisMinute\StructureDecoder\field;
 use RightThisMinute\StructureDecoder\types as T;
 use function RightThisMinute\StructureDecoder\optional_field;
@@ -155,7 +156,7 @@ class VideoField
    *
    * @param $data
    *
-   * @throws \RightThisMinute\StructureDecoder\exceptions\DecodeError
+   * @throws DecodeError
    */
   public function __construct ($data)
   {
@@ -217,7 +218,7 @@ class VideoErrorField
    *
    * @param object|array $data
    *
-   * @throws \RightThisMinute\StructureDecoder\exceptions\DecodeError
+   * @throws DecodeError
    */
   public function __construct ($data)
   {
