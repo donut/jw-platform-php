@@ -131,7 +131,7 @@ class VideoField
   public $size;
 
   /**
-   * @var string
+   * @var string|null
    */
   public $md5;
 
@@ -192,7 +192,7 @@ class VideoField
 
     $this->mediatype = field($data, 'mediatype', T\string());
     $this->size = field($data, 'size', T\string());
-    $this->md5 = field($data, 'md5', T\string());
+    $this->md5 = optional_field($data, 'md5', T\string());
     $this->duration = field($data, 'duration', T\string());
     $this->trim_out_point =
       optional_field($data, 'trim_out_point', T\string());
