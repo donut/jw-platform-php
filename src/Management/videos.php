@@ -254,7 +254,7 @@ function delete (Client $client, array $video_keys) : ?VideosDeleteBody
   $values = ['video_key' => implode(',', $video_keys)];
 
   try {
-    $response_body = $client->post('/videos/update', [], $values);
+    $response_body = $client->post('/videos/delete', [], $values);
   }
   catch (NotFoundResponse $_) {
     return null;
