@@ -8,6 +8,7 @@ namespace RightThisMinute\JWPlatform\Management\exception;
 use Psr\Http\Message\ResponseInterface;
 use RightThisMinute\JWPlatform\exception\ResponseBase;
 use RightThisMinute\JWPlatform\Management\response\ErrorBody;
+use RightThisMinute\StructureDecoder\exceptions\DecodeError;
 
 
 abstract class ErrorResponse extends ResponseBase
@@ -20,12 +21,12 @@ abstract class ErrorResponse extends ResponseBase
    *
    * @param string $method
    * @param string $uri
-   * @param \Psr\Http\Message\ResponseInterface $response
+   * @param ResponseInterface $response
    * @param object|ErrorBody $body
    *   Either the decoded JSON object from the response body or an instance
    *   of ErrorBody.
    *
-   * @throws \RightThisMinute\StructureDecoder\exceptions\DecodeError
+   * @throws DecodeError
    */
   public function __construct
     ( string $method

@@ -103,7 +103,7 @@ class Client
    *   and sent in the request body
    *
    * @return SuccessJSONBody
-   *   The parsed JSON response or null on 404.
+   *   The parsed JSON response.
    *
    * @throws BadRequestResponse
    * @throws ConflictResponse
