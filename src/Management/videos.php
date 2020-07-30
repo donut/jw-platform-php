@@ -13,6 +13,7 @@ use RightThisMinute\JWPlatform\Management\exception\ConflictResponse;
 use RightThisMinute\JWPlatform\Management\exception\MethodNotAllowedResponse;
 use RightThisMinute\JWPlatform\Management\exception\NotFoundResponse;
 use RightThisMinute\JWPlatform\Management\exception\TooManyRequestsResponse;
+use RightThisMinute\JWPlatform\Management\exception\TooManyRequestsResponseWithRetry;
 use RightThisMinute\JWPlatform\Management\exception\UnknownErrorResponse;
 use RightThisMinute\JWPlatform\Management\response\SuccessBody;
 use RightThisMinute\JWPlatform\Management\response\VideosCreateBody;
@@ -22,6 +23,7 @@ use RightThisMinute\StructureDecoder\exceptions\DecodeError;
 use function Functional\map;
 use function Functional\reduce_left;
 use function Functional\reject;
+
 
 /**
  * Show the properties of a video.
@@ -37,10 +39,10 @@ use function Functional\reject;
  * @throws ConflictResponse
  * @throws InvalidResponseJSON
  * @throws MethodNotAllowedResponse
- * @throws TooManyRequestsResponse
  * @throws UnknownErrorResponse
  * @throws URLTooLong
  * @throws DecodeError
+ * @throws TooManyRequestsResponseWithRetry
  */
 function show (Client $client, string $video_key) : ?VideosShowBody
 {
@@ -49,6 +51,11 @@ function show (Client $client, string $video_key) : ?VideosShowBody
 
   try {
     $response_body = $client->get($endpoint, $query);
+  }
+  catch (TooManyRequestsResponse $exn) {
+    $args = func_get_args();
+    $remake = function()use($args) { return show(...$args); };
+    throw $exn->addRetry($remake);
   }
   catch (NotFoundResponse $_) {
     return null;
@@ -104,14 +111,23 @@ function show (Client $client, string $video_key) : ?VideosShowBody
  * @throws InvalidResponseJSON
  * @throws MethodNotAllowedResponse
  * @throws NotFoundResponse
- * @throws TooManyRequestsResponse
+ * @throws TooManyRequestsResponseWithRetry
  * @throws URLTooLong
  * @throws UnknownErrorResponse
  */
 function create (Client $client, array $values) : VideosCreateBody
 {
   $values = _prep_create_update_params($values);
-  $response_body = $client->post('/videos/create', [], $values);
+
+  try {
+    $response_body = $client->post('/videos/create', [], $values);
+  }
+  catch (TooManyRequestsResponse $exn) {
+    $args = func_get_args();
+    $remake = function()use($args) { return create(...$args); };
+    throw $exn->addRetry($remake);
+  }
+
   return new VideosCreateBody($response_body->json);
 }
 
@@ -152,10 +168,10 @@ function create (Client $client, array $values) : VideosCreateBody
  * @throws ConflictResponse
  * @throws InvalidResponseJSON
  * @throws MethodNotAllowedResponse
- * @throws TooManyRequestsResponse
  * @throws UnknownErrorResponse
  * @throws URLTooLong
  * @throws DecodeError
+ * @throws TooManyRequestsResponseWithRetry
  */
 function update (Client $client, string $video_key, array $values)
   : ?SuccessBody
@@ -165,6 +181,11 @@ function update (Client $client, string $video_key, array $values)
 
   try {
     return $client->post('/videos/update', [], $values);
+  }
+  catch (TooManyRequestsResponse $exn) {
+    $args = func_get_args();
+    $remake = function()use($args) { return update(...$args); };
+    throw $exn->addRetry($remake);
   }
   catch (NotFoundResponse $_) {
     return null;
@@ -237,18 +258,19 @@ function _prep_create_update_params (array $values) : array
  * @param Client $client
  * @param string[] $video_keys
  *
- * @return VideosDeleteBody|null
+ * @return VideosDeleteBody
  *
  * @throws BadRequestResponse
  * @throws ConflictResponse
  * @throws DecodeError
  * @throws InvalidResponseJSON
  * @throws MethodNotAllowedResponse
- * @throws TooManyRequestsResponse
  * @throws URLTooLong
  * @throws UnknownErrorResponse
+ * @throws NotFoundResponse
+ * @throws TooManyRequestsResponseWithRetry
  */
-function delete (Client $client, array $video_keys) : ?VideosDeleteBody
+function delete (Client $client, array $video_keys) : VideosDeleteBody
 {
 
   $values = ['video_key' => implode(',', $video_keys)];
@@ -256,8 +278,10 @@ function delete (Client $client, array $video_keys) : ?VideosDeleteBody
   try {
     $response_body = $client->post('/videos/delete', [], $values);
   }
-  catch (NotFoundResponse $_) {
-    return null;
+  catch (TooManyRequestsResponse $exn) {
+    $args = func_get_args();
+    $remake = function()use($args) { return delete(...$args); };
+    throw $exn->addRetry($remake);
   }
 
   return new VideosDeleteBody($response_body->json);
@@ -278,10 +302,10 @@ function delete (Client $client, array $video_keys) : ?VideosDeleteBody
  * @throws ConflictResponse
  * @throws InvalidResponseJSON
  * @throws MethodNotAllowedResponse
- * @throws TooManyRequestsResponse
  * @throws UnknownErrorResponse
  * @throws URLTooLong
  * @throws DecodeError
+ * @throws TooManyRequestsResponseWithRetry
  */
 function add_tags (Client $client, string $video_key, array $tags) : ?array
 {
@@ -320,10 +344,10 @@ function add_tags (Client $client, string $video_key, array $tags) : ?array
  * @throws ConflictResponse
  * @throws InvalidResponseJSON
  * @throws MethodNotAllowedResponse
- * @throws TooManyRequestsResponse
  * @throws UnknownErrorResponse
  * @throws URLTooLong
  * @throws DecodeError
+ * @throws TooManyRequestsResponseWithRetry
  */
 function remove_tags (Client $client, string $video_key, array $tags) : ?array
 {
