@@ -5,8 +5,17 @@ declare(strict_types=1);
 namespace RightThisMinute\JWPlatform\Management\accounts\templates;
 
 
+use RightThisMinute\JWPlatform\exception\InvalidResponseJSON;
+use RightThisMinute\JWPlatform\exception\URLTooLong;
 use RightThisMinute\JWPlatform\Management\Client;
+use RightThisMinute\JWPlatform\Management\exception\BadRequestResponse;
+use RightThisMinute\JWPlatform\Management\exception\ConflictResponse;
+use RightThisMinute\JWPlatform\Management\exception\MethodNotAllowedResponse;
+use RightThisMinute\JWPlatform\Management\exception\NotFoundResponse;
+use RightThisMinute\JWPlatform\Management\exception\TooManyRequestsResponse;
+use RightThisMinute\JWPlatform\Management\exception\UnknownErrorResponse;
 use RightThisMinute\JWPlatform\Management\response\AccountsTemplatesListBody;
+use RightThisMinute\StructureDecoder\exceptions\DecodeError;
 
 
 /**
@@ -15,18 +24,18 @@ use RightThisMinute\JWPlatform\Management\response\AccountsTemplatesListBody;
  * This can be used to find the template key needed to add a conversion to a
  * video.
  *
- * @param \RightThisMinute\JWPlatform\Management\Client $client
+ * @param Client $client
  *
- * @return \RightThisMinute\JWPlatform\Management\response\AccountsTemplatesListBody
- * @throws \RightThisMinute\JWPlatform\Management\exception\BadRequestResponse
- * @throws \RightThisMinute\JWPlatform\Management\exception\ConflictResponse
- * @throws \RightThisMinute\JWPlatform\exception\InvalidResponseJSON
- * @throws \RightThisMinute\JWPlatform\Management\exception\MethodNotAllowedResponse
- * @throws \RightThisMinute\JWPlatform\Management\exception\NotFoundResponse
- * @throws \RightThisMinute\JWPlatform\Management\exception\TooManyRequestsResponse
- * @throws \RightThisMinute\JWPlatform\Management\exception\UnknownErrorResponse
- * @throws \RightThisMinute\JWPlatform\exception\URLTooLong
- * @throws \RightThisMinute\StructureDecoder\exceptions\DecodeError
+ * @return AccountsTemplatesListBody
+ * @throws BadRequestResponse
+ * @throws ConflictResponse
+ * @throws InvalidResponseJSON
+ * @throws MethodNotAllowedResponse
+ * @throws NotFoundResponse
+ * @throws TooManyRequestsResponse
+ * @throws UnknownErrorResponse
+ * @throws URLTooLong
+ * @throws DecodeError
  */
 function list_ (Client $client) : AccountsTemplatesListBody
 {

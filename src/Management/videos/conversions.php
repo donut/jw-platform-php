@@ -5,35 +5,43 @@ declare(strict_types=1);
 namespace RightThisMinute\JWPlatform\Management\videos\conversions;
 
 
+use RightThisMinute\JWPlatform\exception\InvalidResponseJSON;
+use RightThisMinute\JWPlatform\exception\URLTooLong;
 use RightThisMinute\JWPlatform\Management\Client;
+use RightThisMinute\JWPlatform\Management\exception\BadRequestResponse;
+use RightThisMinute\JWPlatform\Management\exception\ConflictResponse;
+use RightThisMinute\JWPlatform\Management\exception\MethodNotAllowedResponse;
 use RightThisMinute\JWPlatform\Management\exception\NotFoundResponse;
+use RightThisMinute\JWPlatform\Management\exception\TooManyRequestsResponse;
+use RightThisMinute\JWPlatform\Management\exception\UnknownErrorResponse;
 use RightThisMinute\JWPlatform\Management\response\SuccessBody;
 use RightThisMinute\JWPlatform\Management\response\VideosConversionsCreateBody;
 use RightThisMinute\JWPlatform\Management\response\VideosConversionsListBody;
+use RightThisMinute\StructureDecoder\exceptions\DecodeError;
 
 
 /**
  * Create a new video conversion.
  *
- * @param \RightThisMinute\JWPlatform\Management\Client $client
+ * @param Client $client
  * @param string $video_key
  *   Key of the video for which conversion should be created.
  * @param string $template_key
  *   Key of the conversion template that should be used for this conversion.
  *   This can be found by calling /accounts/templates/list.
  *
- * @return \RightThisMinute\JWPlatform\Management\response\VideosConversionsCreateBody|null
+ * @return VideosConversionsCreateBody|null
  *   The response object on success, null if $video_key or $template_key don't
  *   exist at JW.
  *
- * @throws \RightThisMinute\JWPlatform\Management\exception\BadRequestResponse
- * @throws \RightThisMinute\JWPlatform\Management\exception\ConflictResponse
- * @throws \RightThisMinute\JWPlatform\exception\InvalidResponseJSON
- * @throws \RightThisMinute\JWPlatform\Management\exception\MethodNotAllowedResponse
- * @throws \RightThisMinute\JWPlatform\Management\exception\TooManyRequestsResponse
- * @throws \RightThisMinute\JWPlatform\Management\exception\UnknownErrorResponse
- * @throws \RightThisMinute\JWPlatform\exception\URLTooLong
- * @throws \RightThisMinute\StructureDecoder\exceptions\DecodeError
+ * @throws BadRequestResponse
+ * @throws ConflictResponse
+ * @throws InvalidResponseJSON
+ * @throws MethodNotAllowedResponse
+ * @throws TooManyRequestsResponse
+ * @throws UnknownErrorResponse
+ * @throws URLTooLong
+ * @throws DecodeError
  */
 function create (Client $client, string $video_key, string $template_key)
   : ?VideosConversionsCreateBody
@@ -55,21 +63,21 @@ function create (Client $client, string $video_key, string $template_key)
 /**
  * Delete a video conversion.
  *
- * @param \RightThisMinute\JWPlatform\Management\Client $client
+ * @param Client $client
  * @param string $conversion_key
  *   Key of the conversion that should be delete.
  *
- * @return \RightThisMinute\JWPlatform\Management\response\SuccessBody|null
+ * @return SuccessBody|null
  *  Null if $conversion_key doesn't exist at JW.
  *
- * @throws \RightThisMinute\JWPlatform\Management\exception\BadRequestResponse
- * @throws \RightThisMinute\JWPlatform\Management\exception\ConflictResponse
- * @throws \RightThisMinute\JWPlatform\exception\InvalidResponseJSON
- * @throws \RightThisMinute\JWPlatform\Management\exception\MethodNotAllowedResponse
- * @throws \RightThisMinute\JWPlatform\Management\exception\TooManyRequestsResponse
- * @throws \RightThisMinute\JWPlatform\Management\exception\UnknownErrorResponse
- * @throws \RightThisMinute\JWPlatform\exception\URLTooLong
- * @throws \RightThisMinute\StructureDecoder\exceptions\DecodeError
+ * @throws BadRequestResponse
+ * @throws ConflictResponse
+ * @throws InvalidResponseJSON
+ * @throws MethodNotAllowedResponse
+ * @throws TooManyRequestsResponse
+ * @throws UnknownErrorResponse
+ * @throws URLTooLong
+ * @throws DecodeError
  */
 function delete (Client $client, string $conversion_key) : ?SuccessBody
 {
@@ -90,21 +98,21 @@ function delete (Client $client, string $conversion_key) : ?SuccessBody
 /**
  * List of conversions for the specified video.
  *
- * @param \RightThisMinute\JWPlatform\Management\Client $client
+ * @param Client $client
  * @param string $video_key
  *   Key of the video which conversions to list.
  *
  * @return VideosConversionsListBody
  *
- * @throws \RightThisMinute\JWPlatform\Management\exception\BadRequestResponse
- * @throws \RightThisMinute\JWPlatform\Management\exception\ConflictResponse
- * @throws \RightThisMinute\JWPlatform\exception\InvalidResponseJSON
- * @throws \RightThisMinute\JWPlatform\Management\exception\MethodNotAllowedResponse
- * @throws \RightThisMinute\JWPlatform\Management\exception\NotFoundResponse
- * @throws \RightThisMinute\JWPlatform\Management\exception\TooManyRequestsResponse
- * @throws \RightThisMinute\JWPlatform\Management\exception\UnknownErrorResponse
- * @throws \RightThisMinute\JWPlatform\exception\URLTooLong
- * @throws \RightThisMinute\StructureDecoder\exceptions\DecodeError
+ * @throws BadRequestResponse
+ * @throws ConflictResponse
+ * @throws InvalidResponseJSON
+ * @throws MethodNotAllowedResponse
+ * @throws NotFoundResponse
+ * @throws TooManyRequestsResponse
+ * @throws UnknownErrorResponse
+ * @throws URLTooLong
+ * @throws DecodeError
  */
 function list_ (Client $client, string $video_key) : VideosConversionsListBody
 {
