@@ -12,6 +12,7 @@ use RightThisMinute\JWPlatform\Management\exception\BadRequestResponse;
 use RightThisMinute\JWPlatform\Management\exception\ConflictResponse;
 use RightThisMinute\JWPlatform\Management\exception\MethodNotAllowedResponse;
 use RightThisMinute\JWPlatform\Management\exception\NotFoundResponse;
+use RightThisMinute\JWPlatform\Management\exception\PreconditionFailedResponse;
 use RightThisMinute\JWPlatform\Management\exception\TooManyRequestsResponse;
 use RightThisMinute\JWPlatform\Management\exception\UnknownErrorResponse;
 use RightThisMinute\JWPlatform\Management\response\AccountsTemplatesListBody;
@@ -36,6 +37,7 @@ use RightThisMinute\StructureDecoder\exceptions\DecodeError;
  * @throws UnknownErrorResponse
  * @throws URLTooLong
  * @throws DecodeError
+ * @throws PreconditionFailedResponse
  */
 function list_ (Client $client) : AccountsTemplatesListBody
 {

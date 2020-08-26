@@ -12,6 +12,7 @@ use RightThisMinute\JWPlatform\Management\exception\BadRequestResponse;
 use RightThisMinute\JWPlatform\Management\exception\ConflictResponse;
 use RightThisMinute\JWPlatform\Management\exception\MethodNotAllowedResponse;
 use RightThisMinute\JWPlatform\Management\exception\NotFoundResponse;
+use RightThisMinute\JWPlatform\Management\exception\PreconditionFailedResponse;
 use RightThisMinute\JWPlatform\Management\exception\TooManyRequestsResponse;
 use RightThisMinute\JWPlatform\Management\exception\TooManyRequestsResponseWithRetry;
 use RightThisMinute\JWPlatform\Management\exception\UnknownErrorResponse;
@@ -43,6 +44,7 @@ use function Functional\reject;
  * @throws URLTooLong
  * @throws DecodeError
  * @throws TooManyRequestsResponseWithRetry
+ * @throws PreconditionFailedResponse
  */
 function show (Client $client, string $video_key) : ?VideosShowBody
 {
@@ -114,6 +116,7 @@ function show (Client $client, string $video_key) : ?VideosShowBody
  * @throws TooManyRequestsResponseWithRetry
  * @throws URLTooLong
  * @throws UnknownErrorResponse
+ * @throws PreconditionFailedResponse
  */
 function create (Client $client, array $values) : VideosCreateBody
 {
@@ -172,6 +175,7 @@ function create (Client $client, array $values) : VideosCreateBody
  * @throws URLTooLong
  * @throws DecodeError
  * @throws TooManyRequestsResponseWithRetry
+ * @throws PreconditionFailedResponse
  */
 function update (Client $client, string $video_key, array $values)
   : ?SuccessBody
@@ -269,6 +273,7 @@ function _prep_create_update_params (array $values) : array
  * @throws UnknownErrorResponse
  * @throws NotFoundResponse
  * @throws TooManyRequestsResponseWithRetry
+ * @throws PreconditionFailedResponse
  */
 function delete (Client $client, array $video_keys) : VideosDeleteBody
 {
@@ -306,6 +311,7 @@ function delete (Client $client, array $video_keys) : VideosDeleteBody
  * @throws URLTooLong
  * @throws DecodeError
  * @throws TooManyRequestsResponseWithRetry
+ * @throws PreconditionFailedResponse
  */
 function add_tags (Client $client, string $video_key, array $tags) : ?array
 {
@@ -348,6 +354,7 @@ function add_tags (Client $client, string $video_key, array $tags) : ?array
  * @throws URLTooLong
  * @throws DecodeError
  * @throws TooManyRequestsResponseWithRetry
+ * @throws PreconditionFailedResponse
  */
 function remove_tags (Client $client, string $video_key, array $tags) : ?array
 {

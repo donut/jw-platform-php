@@ -13,6 +13,7 @@ use RightThisMinute\JWPlatform\Management\exception\ConflictResponse;
 use RightThisMinute\JWPlatform\exception\InvalidResponseJSON;
 use RightThisMinute\JWPlatform\Management\exception\MethodNotAllowedResponse;
 use RightThisMinute\JWPlatform\Management\exception\NotFoundResponse;
+use RightThisMinute\JWPlatform\Management\exception\PreconditionFailedResponse;
 use RightThisMinute\JWPlatform\Management\exception\TooManyRequestsResponse;
 use RightThisMinute\JWPlatform\Management\exception\UnknownErrorResponse;
 use RightThisMinute\JWPlatform\Management\response\SuccessJSONBody;
@@ -79,6 +80,7 @@ class Client
    * @throws UnknownErrorResponse
    * @throws URLTooLong
    * @throws DecodeError
+   * @throws PreconditionFailedResponse
    */
   public function get (string $endpoint, array $query=[]) : SuccessJSONBody
   {
@@ -114,6 +116,7 @@ class Client
    * @throws UnknownErrorResponse
    * @throws URLTooLong
    * @throws DecodeError
+   * @throws PreconditionFailedResponse
    */
   public function post (string $endpoint, array $query=[], array $form_data=[])
     : SuccessJSONBody
@@ -141,6 +144,7 @@ class Client
    * @throws TooManyRequestsResponse
    * @throws UnknownErrorResponse
    * @throws DecodeError
+   * @throws PreconditionFailedResponse
    */
   private function processResponse
     (string $method, string $uri, ResponseInterface $response) : SuccessJSONBody
@@ -171,6 +175,9 @@ class Client
 
       case 409:
         throw new ConflictResponse($method, $uri, $response, $json);
+
+      case 412:
+        throw new PreconditionFailedResponse($method, $uri, $response, $json);
 
       case 429:
         throw new TooManyRequestsResponse($method, $uri, $response, $json);
