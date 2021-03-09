@@ -277,7 +277,6 @@ function _prep_create_update_params (array $values) : array
  */
 function delete (Client $client, array $video_keys) : VideosDeleteBody
 {
-
   $values = ['video_key' => implode(',', $video_keys)];
 
   try {

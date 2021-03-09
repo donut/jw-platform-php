@@ -21,6 +21,7 @@ use RightThisMinute\StructureDecoder\exceptions\DecodeError;
 use function Functional\map;
 use const RightThisMinute\JWPlatform\common\MAX_REQUEST_URL_LENGTH;
 
+
 class Client
 {
   const BASE_URI = 'https://api.jwplatform.com/v1/';
