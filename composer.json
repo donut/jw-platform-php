@@ -36,6 +36,7 @@
             "src/Management/v1/accounts/templates.php",
             "src/Management/v1/videos.php",
             "src/Management/v1/videos/conversions.php",
+            "src/Management/v2/endpoint/media.php",
             "src/Management/v2/endpoint/webhooks.php"
         ]
     }
