@@ -40,26 +40,7 @@ class WebhooksList extends Success
 
 class WebhooksListBody
 {
-  /**
-   * Offset for returned resources. Starts at 1.
-   *
-   * @var int
-   */
-  public $page;
-
-  /**
-   * Maximum number of resources to return
-   *
-   * @var int
-   */
-  public $page_length;
-
-  /**
-   * Number of resources available before pagination
-   *
-   * @var int
-   */
-  public $total;
+  use PagedResultTrait;
 
   /**
    * Resource for managing the individual webhooks of an account
@@ -77,9 +58,7 @@ class WebhooksListBody
    */
   public function __construct ($data)
   {
-    $this->page = field($data, 'page', T\int());
-    $this->page_length = field($data, 'page_length', T\int());
-    $this->total = field($data, 'total', T\int());
+    $this->constructPagedResultTrait($data);
     $this->webhooks = field
       ($data, 'webhooks', T\array_of(Webhook::decoder()));
   }
